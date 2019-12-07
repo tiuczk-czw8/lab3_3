@@ -1,6 +1,7 @@
 package edu.iis.mto.time;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import org.jetbrains.annotations.NotNull;
 import org.joda.time.DateTime;
@@ -8,7 +9,7 @@ import org.joda.time.Hours;
 
 public class Order {
 
-    private static final int VALID_PERIOD_HOURS = 24;
+    public static final int VALID_PERIOD_HOURS = 24;
     private State orderState;
     private List<OrderItem> items = new ArrayList<>();
     private DateTime submissionDate;
@@ -23,12 +24,11 @@ public class Order {
         orderState = State.CREATED;
     }
 
-    public void submit() {
+    public void submit(@NotNull DateTime submissionDate) {
         requireState(State.CREATED);
 
         orderState = State.SUBMITTED;
-        submissionDate = new DateTime();
-
+        this.submissionDate = submissionDate;
     }
 
     public void confirm() {
@@ -40,6 +40,8 @@ public class Order {
             orderState = State.CANCELLED;
             throw new OrderExpiredException();
         }
+
+        orderState = State.CONFIRMED;
     }
 
     public void realize() {
@@ -59,13 +61,12 @@ public class Order {
         }
 
         throw new OrderStateException("order should be in state "
-                                      + allowedStates
+                                      + Arrays.toString(allowedStates)
                                       + " to perform required  operation, but is in "
                                       + orderState);
-
     }
 
-    public static enum State {
+    public enum State {
         CREATED,
         SUBMITTED,
         CONFIRMED,
