@@ -36,4 +36,46 @@ public class OrderTest {
         assertThat(order.getOrderState(), is(State.REALIZED));
     }
 
+    @Test
+    public void orderWithinUpperBoundTimeFrameShouldBeRealized() {
+        Order order = new Order();
+        order.addItem(new OrderItem());
+        DateTime submissionDate = new DateTime();
+        submissionDate = submissionDate.minusHours(Order.VALID_PERIOD_HOURS);
+
+        order.submit(submissionDate);
+        order.confirm();
+        order.realize();
+
+        assertThat(order.getOrderState(), is(State.REALIZED));
+    }
+
+    @Test
+    public void orderWithinLowerBoundTimeFrameShouldBeRealized() {
+        Order order = new Order();
+        order.addItem(new OrderItem());
+        DateTime submissionDate = new DateTime();
+        submissionDate = submissionDate.minus(Period.millis(1));
+
+        order.submit(submissionDate);
+        order.confirm();
+        order.realize();
+
+        assertThat(order.getOrderState(), is(State.REALIZED));
+    }
+
+    @Test
+    public void confirmCallUsingSystemClockShouldBeOK() {
+        Order order = new Order();
+        order.addItem(new OrderItem());
+        java.util.Date systemClock = new java.util.Date();
+        DateTime submissionDate = new DateTime(systemClock);
+
+        order.submit(submissionDate);
+        order.confirm();
+        order.realize();
+
+        assertThat(order.getOrderState(), is(State.REALIZED));
+    }
+
 }
