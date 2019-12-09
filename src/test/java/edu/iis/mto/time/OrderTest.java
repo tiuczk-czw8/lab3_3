@@ -5,6 +5,7 @@ import org.joda.time.Period;
 import org.junit.Before;
 import org.junit.Test;
 
+import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.*;
 
 public class OrderTest {
@@ -23,6 +24,16 @@ public class OrderTest {
         order.addItem(orderItem);
         order.submit(new DateTime().minus(Period.hours(VALID_PERIOD_HOURS + 1)));
         order.confirm();
+    }
+
+    @Test
+    public void shouldBeValidOrderForWithinTimeRange () {
+        OrderItem orderItem = new OrderItem();
+        order.addItem(orderItem);
+        order.submit(null);
+        order.confirm();
+        order.realize();
+        assertThat(order.getOrderState(), is(Order.State.REALIZED));
     }
 
 }
