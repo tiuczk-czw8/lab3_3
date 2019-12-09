@@ -5,6 +5,7 @@ import org.joda.time.Period;
 import org.junit.Before;
 import org.junit.Test;
 
+import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.*;
 
 public class OrderTest {
@@ -25,5 +26,15 @@ public class OrderTest {
         order.addItem(item);
         order.submit(new DateTime().minus(Period.hours(VALID_PERIOD_HOURS + 1)));
         order.confirm();
+    }
+
+    @Test
+    public void shouldNotThrowOrderExpiredException() {
+        OrderItem item = new OrderItem();
+        order.addItem(item);
+        order.submit(new DateTime().minus(Period.minutes(1)));
+        order.confirm();
+        order.realize();
+        assertThat(order.getOrderState(), is(Order.State.REALIZED));
     }
 }
