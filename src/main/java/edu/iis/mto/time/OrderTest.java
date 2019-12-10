@@ -34,5 +34,17 @@ public class OrderTest {
         assertThat(order.getOrderState(), is(Order.State.REALIZED));
     }
 
+    @Test
+    public void  shouldNotThrowExceptionOrderExpired(){
+        Order order = new Order();
+        OrderItem item = new OrderItem();
+        order.addItem(item);
+        order.submit(new DateTime().minus(Period.minutes(1)));
+        order.confirm();
+        order.realize();
+        assertThat(order.getOrderState(), is(Order.State.REALIZED));
+
+    }
+
 
 }

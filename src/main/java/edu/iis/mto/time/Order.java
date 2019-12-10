@@ -43,6 +43,10 @@ public class Order {
 			orderState = State.CANCELLED;
 			throw new OrderExpiredException();
 		}
+		else
+		{
+			orderState = State.CONFIRMED;
+		}
 	}
 
 	public void realize() {
