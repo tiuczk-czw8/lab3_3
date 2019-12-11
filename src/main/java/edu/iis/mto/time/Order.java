@@ -11,11 +11,15 @@ public class Order {
 	private State orderState;
 	private List<OrderItem> items = new ArrayList<OrderItem>();
 	private DateTime subbmitionDate;
+	private DateTime testDataTime;
 
 	public Order() {
 		orderState = State.CREATED;
 	}
-
+	public void setDataTimeForTest(DateTime dateTime)
+	{
+		this.testDataTime=dateTime;
+	}
 	public void addItem(OrderItem item) {
 		requireState(State.CREATED, State.SUBMITTED);
 
@@ -28,7 +32,13 @@ public class Order {
 		requireState(State.CREATED);
 
 		orderState = State.SUBMITTED;
-		subbmitionDate = new DateTime();
+		if(testDataTime==null)
+		{
+			subbmitionDate = new DateTime();
+		}
+		else {
+			subbmitionDate=testDataTime;
+		}
 
 	}
 
