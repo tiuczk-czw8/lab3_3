@@ -1,5 +1,4 @@
 package edu.iis.mto.time;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,11 +23,15 @@ public class Order {
 
 	}
 
-	public void submit(Object o) {
+	public void submit(DateTime dateTimeTest) {
 		requireState(State.CREATED);
 
 		orderState = State.SUBMITTED;
-		subbmitionDate = new DateTime();
+		if (dateTimeTest == null) {
+			subbmitionDate = new DateTime();
+		} else {
+			subbmitionDate = dateTimeTest;
+		}
 
 	}
 
@@ -48,10 +51,10 @@ public class Order {
 		orderState = State.REALIZED;
 	}
 
-	public State getOrderState() {
+	State getOrderState() {
 		return orderState;
 	}
-	
+
 	private void requireState(State... allowedStates) {
 		for (State allowedState : allowedStates) {
 			if (orderState == allowedState)
