@@ -10,7 +10,7 @@ import static org.junit.Assert.assertThat;
 
 public class OrderTest {
     private Order order = new Order();
-    OrderItem orderItem = new OrderItem();
+    private OrderItem orderItem = new OrderItem();
     @Test(expected = OrderExpiredException.class)
     public void testOrderExpiredExeption(){
         order.addItem(orderItem);
