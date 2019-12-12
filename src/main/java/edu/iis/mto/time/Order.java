@@ -8,7 +8,7 @@ import org.joda.time.Hours;
 
 public class Order {
 
-    private static final int VALID_PERIOD_HOURS = 24;
+    public static final int VALID_PERIOD_HOURS = 24;
     private State orderState;
     private List<OrderItem> items = new ArrayList<>();
     private DateTime subbmitionDate;
@@ -53,7 +53,7 @@ public class Order {
         orderState = State.REALIZED;
     }
 
-    State getOrderState() {
+    public State getOrderState() {
         return orderState;
     }
 
