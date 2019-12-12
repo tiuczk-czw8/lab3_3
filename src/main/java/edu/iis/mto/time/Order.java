@@ -24,12 +24,15 @@ public class Order {
 
 	}
 
-	public void submit() {
+	public void submit(DateTime submissionDate) {
 		requireState(State.CREATED);
 
 		orderState = State.SUBMITTED;
-		subbmitionDate = new DateTime();
-
+		if (submissionDate != null) {
+			subbmitionDate = submissionDate;
+		} else {
+			subbmitionDate = new DateTime();
+		}
 	}
 
 	public void confirm() {
@@ -39,6 +42,9 @@ public class Order {
 			orderState = State.CANCELLED;
 			throw new OrderExpiredException();
 		}
+		else{
+			orderState = State.CONFIRMED;
+		}
 	}
 
 	public void realize() {
@@ -46,7 +52,7 @@ public class Order {
 		orderState = State.REALIZED;
 	}
 
-	State getOrderState() {
+	public State getOrderState() {
 		return orderState;
 	}
 	
