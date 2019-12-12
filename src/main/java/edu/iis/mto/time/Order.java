@@ -24,11 +24,18 @@ public class Order {
 
 	}
 
-	public void submit() {
+	public void submit(DateTime dateTimeTest) {
 		requireState(State.CREATED);
 
 		orderState = State.SUBMITTED;
-		subbmitionDate = new DateTime();
+		if(dateTimeTest == null)
+		{
+			subbmitionDate = new DateTime();
+		}
+		else
+		{
+			subbmitionDate = dateTimeTest;
+		}
 
 	}
 
