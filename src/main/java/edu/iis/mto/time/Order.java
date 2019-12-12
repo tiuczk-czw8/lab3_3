@@ -28,12 +28,10 @@ public class Order {
 		requireState(State.CREATED);
 
 		orderState = State.SUBMITTED;
-		if(dateTimeTest == null)
-		{
+		if(dateTimeTest == null) {
 			subbmitionDate = new DateTime();
 		}
-		else
-		{
+		else {
 			subbmitionDate = dateTimeTest;
 		}
 
@@ -42,9 +40,12 @@ public class Order {
 	public void confirm() {
 		requireState(State.SUBMITTED);
 		int hoursElapsedAfterSubmittion = Hours.hoursBetween(subbmitionDate, new DateTime()).getHours();
-		if(hoursElapsedAfterSubmittion > VALID_PERIOD_HOURS){
+		if( hoursElapsedAfterSubmittion > VALID_PERIOD_HOURS){
 			orderState = State.CANCELLED;
 			throw new OrderExpiredException();
+		}
+		else {
+			orderState = State.CONFIRMED;
 		}
 	}
 
