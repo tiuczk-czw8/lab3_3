@@ -1,6 +1,7 @@
 package edu.iis.mto.time;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.joda.time.DateTime;
@@ -11,6 +12,7 @@ public class Order {
 	private State orderState;
 	private List<OrderItem> items = new ArrayList<OrderItem>();
 	private DateTime subbmitionDate;
+	private FakeClock fakeClock = null;
 
 	public Order() {
 		orderState = State.CREATED;
@@ -34,7 +36,14 @@ public class Order {
 
 	public void confirm() {
 		requireState(State.SUBMITTED);
-		int hoursElapsedAfterSubmittion = Hours.hoursBetween(subbmitionDate, new DateTime()).getHours();
+		int hoursElapsedAfterSubmittion;
+		if (fakeClock == null) {
+			hoursElapsedAfterSubmittion = Hours.hoursBetween(subbmitionDate, new DateTime()).getHours();
+		} else {
+			Date date = Date.from(fakeClock.instant());
+			DateTime dateTime = new DateTime(date);
+			hoursElapsedAfterSubmittion = Hours.hoursBetween(subbmitionDate, dateTime).getHours();
+		}
 		if(hoursElapsedAfterSubmittion > VALID_PERIOD_HOURS){
 			orderState = State.CANCELLED;
 			throw new OrderExpiredException();
@@ -46,10 +55,14 @@ public class Order {
 		orderState = State.REALIZED;
 	}
 
+	public void setFakeClock(FakeClock fakeClock) {
+		this.fakeClock = fakeClock;
+	}
+
 	State getOrderState() {
 		return orderState;
 	}
-	
+
 	private void requireState(State... allowedStates) {
 		for (State allowedState : allowedStates) {
 			if (orderState == allowedState)
