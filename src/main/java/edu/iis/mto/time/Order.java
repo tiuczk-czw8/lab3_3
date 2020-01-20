@@ -24,11 +24,15 @@ public class Order {
 
 	}
 
-	public void submit() {
+	public void submit(DateTime dateTime) {
 		requireState(State.CREATED);
 
 		orderState = State.SUBMITTED;
-		subbmitionDate = new DateTime();
+		if (dateTime == null) {
+			subbmitionDate = new DateTime();
+		} else {
+			subbmitionDate = dateTime;
+		}
 
 	}
 
@@ -38,6 +42,10 @@ public class Order {
 		if(hoursElapsedAfterSubmittion > VALID_PERIOD_HOURS){
 			orderState = State.CANCELLED;
 			throw new OrderExpiredException();
+		}
+		else
+		{
+			orderState = State.CONFIRMED;
 		}
 	}
 
