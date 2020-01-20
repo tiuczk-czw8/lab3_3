@@ -2,6 +2,7 @@ package edu.iis.mto.time;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.joda.time.DateTime;
 import org.joda.time.Hours;
@@ -24,11 +25,20 @@ public class Order {
 
 	}
 
-	public void submit() {
+	public void submit(DateTime dateTimeTest) {
 		requireState(State.CREATED);
 
 		orderState = State.SUBMITTED;
-		subbmitionDate = new DateTime();
+
+		if(dateTimeTest == null)
+		{
+			subbmitionDate = new DateTime();
+		}
+		else
+		{
+			subbmitionDate = dateTimeTest;
+		}
+
 
 	}
 
@@ -38,6 +48,10 @@ public class Order {
 		if(hoursElapsedAfterSubmittion > VALID_PERIOD_HOURS){
 			orderState = State.CANCELLED;
 			throw new OrderExpiredException();
+		}
+		else
+		{
+			orderState = State.CONFIRMED;
 		}
 	}
 
